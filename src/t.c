@@ -32,7 +32,7 @@ static size_t write_memory_callback(void *contents, size_t size, size_t nmemb,
 }
 
 // Function to translate a single string
-char *translate() {
+char *translate(const char *source, const char *target, const char *value) {
   CURL *curl;
   CURLcode res;
   struct MemoryStruct chunk;
@@ -44,7 +44,8 @@ char *translate() {
   chunk.size = 0;           // no data at this point
 
   // Construct the URL
-  snprintf(url, sizeof(url), "https://mtranslate.myridia.com/ftl");
+  snprintf(url, sizeof(url), "https://mtranslate.myridia.com?s=%s&t=%s&v=%s",
+           source, target, value);
 
   // Initialize curl
   curl = curl_easy_init();
@@ -77,7 +78,7 @@ char *translate() {
         goto cleanup;
       } else {
         // Extract the 'translated_text' field
-        json_t *translated_text = json_object_get(root, "ftl");
+        json_t *translated_text = json_object_get(root, "target_value");
 
         if (translated_text) {
           if (json_is_string(translated_text)) {
@@ -203,8 +204,6 @@ void translate_from_file(const char *filename, const char *source,
 
 int main(int argc, char *argv[]) {
   printf("Arguments: %d \n", argc);
-  char *translation = translate();
-  printf(": %s \n", translation);
   /*
   CURLcode res = curl_global_init(CURL_GLOBAL_DEFAULT);
   if (res != CURLE_OK) {
