@@ -31,13 +31,11 @@ static size_t write_memory_callback(void *contents, size_t size, size_t nmemb,
 }
 
 // Function to translate a single string
-char *get_ftl() {
+void *fill_ftl(char ftl[104][6]) {
   CURL *curl;
   CURLcode res;
   struct MemoryStruct chunk;
   char url[256];
-  char *translation = NULL;
-  char ftl[104][5];
 
   chunk.memory = malloc(1);
   chunk.size = 0;
@@ -79,37 +77,37 @@ char *get_ftl() {
           const char *str = json_string_value(string_value);
 
           if (str) {
-            strcpy(ftl[i], str);
-            printf("String at index %zu: %s\n", i, str);
+            // strcpy(ftl[i], str);
+            strncpy(ftl[i], str, 6 - 1);
+            ftl[i][6 - 1] = '\0';
+            // printf("String at index %zu: %s\n", i, str);
           } else {
             fprintf(stderr, "Error:  %zu.\n", i);
           }
         }
 
       cleanup_json:
-        json_decref(root); // Release the JSON object
+        json_decref(root);
       }
     }
 
   cleanup:
-    // Clean up curl
     curl_easy_cleanup(curl);
   } else {
     fprintf(stderr, "curl_easy_init() failed\n");
-    translation = NULL; // Indicate failure
   }
 
-  // Free the memory allocated for the response
   free(chunk.memory);
-
-  return translation;
-  //  return ftl;
 }
 
 int main(int argc, char *argv[]) {
   printf("Arguments: %d \n", argc);
-  // char *translation = get_ftl();
-  char *a = get_ftl();
+  char ftl[104][6];
+  fill_ftl(ftl);
 
+  for (int i = 0; i < 10; i++) {
+    printf("ftl[%d]: %s\n", i, ftl[i]);
+  }
+  free(ftl);
   return 0;
 }
