@@ -335,10 +335,8 @@ int main(int argc, char *argv[]) {
 
   for (int x = 0; x < 104; x++) {
     char *code = get_substring(ftl[x], 0, 2); // First 2 characters
-    bool h = strncmp(code, "en", 2);
-    if (h == 0) {
-      continue;
-    }
+    bool same_code = strncmp(code, "en", 2);
+
     printf("ftl[%d]: %s\n", x, code);
     FTLMessage messages[104];
     int num_messages = 0;
@@ -348,7 +346,7 @@ int main(int argc, char *argv[]) {
       for (int i = 0; i < num_messages; i++) {
 
         char *translation = NULL;
-        if (!starts_with(messages[i].id, "!")) {
+        if (!starts_with(messages[i].id, "!") && same_code == 1) {
           // printf("ID: %s, Value: %s\n", messages[i].id, messages[i].value);
           translation = translate("en", code, messages[i].value);
           printf("Translation: %s\n", translation); //
