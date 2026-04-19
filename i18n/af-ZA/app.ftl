@@ -1,0 +1,14 @@
+password = Wagwoord 
+open = Maak oop 
+save = Stoor 
+copy = Kopieer 
+paste = Plak 
+cut = Sny 
+search = Soek 
+close = Maak toe 
+enter_text = Voer teks in 
+status = Status 
+show_passwod = Wys wagwoord 
+hide_password = Versteek wagwoord 
+! about = About 
+about_us = Oor ons 

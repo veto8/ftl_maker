@@ -1,3 +1,4 @@
+#include "lib.h"
 #include <ctype.h>
 #include <curl/curl.h>
 #include <dirent.h>
@@ -32,12 +33,9 @@ typedef struct {
   char value[MAX_MESSAGE_VALUE_LENGTH];
 } FTLMessage;
 
-// Helper function: Check if a character is an ASCII alphanumeric or safe
-// character
 int is_safe_utf8(unsigned char c) {
   return isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~';
 }
-
 char *url_encode_utf8(const char *str) {
   size_t len = strlen(str);
   char *encoded =
@@ -501,6 +499,12 @@ char *concat_strings(const char *str1, const char *str2) {
 }
 
 int main(int argc, char *argv[]) {
+
+  int x = 5;
+  int y = 3;
+  int sum = add(x, y);
+  printf("The sum is: %d\n", sum);
+
   char *basefile = NULL;
 
   // printf("filename: %s \n", filename);

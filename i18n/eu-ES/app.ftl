@@ -1,0 +1,14 @@
+password = Pasahitza 
+open = Ireki 
+save = Gorde 
+copy = Kopiatu 
+paste = Itsatsi 
+cut = Moztu 
+search = Bilatu 
+close = Itxi 
+enter_text = Sartu testua 
+status = Egoera 
+show_passwod = Erakutsi pasahitza 
+hide_password = Ezkutatu pasahitza 
+! about = About 
+about_us = Guri buruz 

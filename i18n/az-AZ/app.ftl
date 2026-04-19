@@ -1,0 +1,14 @@
+password = parol 
+open = Açıq 
+save = Saxla 
+copy = Kopyalayın 
+paste = Yapışdırın 
+cut = kəsmək 
+search = Axtar 
+close = Bağlayın 
+enter_text = Mətni daxil edin 
+status = Vəziyyət 
+show_passwod = Parol göstərin 
+hide_password = Parolu gizlədin 
+! about = About 
+about_us = Haqqımızda 

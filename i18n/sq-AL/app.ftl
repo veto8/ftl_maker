@@ -1,0 +1,14 @@
+password = Fjalëkalimi 
+open = Hapur 
+save = Ruaj 
+copy = Kopjo 
+paste = Paste 
+cut = Prerë 
+search = Kërko 
+close = Mbylle 
+enter_text = Fut tekstin 
+status = Statusi 
+show_passwod = Shfaq fjalëkalimin 
+hide_password = Fshih fjalëkalimin 
+! about = About 
+about_us = Rreth Nesh 

@@ -22,7 +22,7 @@ endif()
 
 
 # Add executable
-add_executable(ftl_maker src/ftl_maker.c)
+add_executable(ftl_maker src/ftl_maker.c src/lib.c)
 
 # Link libraries
 target_link_libraries(ftl_maker

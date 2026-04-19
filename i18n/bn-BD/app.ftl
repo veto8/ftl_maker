@@ -1,0 +1,14 @@
+password = পাসওয়ার্ড 
+open = খোলা 
+save = সংরক্ষণ করুন 
+copy = কপি 
+paste = পেস্ট করুন 
+cut = কাটা 
+search = অনুসন্ধান করুন 
+close = বন্ধ 
+enter_text = পাঠ্য লিখুন 
+status = স্ট্যাটাস 
+show_passwod = পাসওয়ার্ড দেখান 
+hide_password = পাসওয়ার্ড লুকান 
+! about = About 
+about_us = আমাদের সম্পর্কে 
