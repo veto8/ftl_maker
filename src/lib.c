@@ -1,7 +1,31 @@
 #include "lib.h"
-
 // test function
 int add(int a, int b) { return a + b; }
+
+char *sanitize_string(const char *input) {
+  if (input == NULL) {
+    return NULL; // Or handle the error as you see fit (e.g., return an empty
+                 // string)
+  }
+
+  size_t input_len = strlen(input);
+  char *sanitized = (char *)malloc(input_len + 1); // Allocate enough memory
+  if (sanitized == NULL) {
+    perror("malloc failed"); // Handle memory allocation failure
+    return NULL;
+  }
+
+  size_t j = 0;
+  for (size_t i = 0; i < input_len; i++) {
+    if (isalnum((unsigned char)input[i]) || input[i] == '_' ||
+        input[i] == '-' || input[i] == '.') {
+      sanitized[j++] = input[i];
+    }
+  }
+
+  sanitized[j] = '\0'; // Null-terminate the sanitized string
+  return sanitized;
+}
 
 static size_t write_memory_callback(void *contents, size_t size, size_t nmemb,
                                     void *userp) {

@@ -42,6 +42,7 @@ struct MemoryStruct {
 };
 
 int add(int a, int b);
+char *sanitize_string(const char *input);
 char *translate(const char *source, const char *target, const char *value);
 static size_t write_memory_callback(void *contents, size_t size, size_t nmemb,
                                     void *userp);
