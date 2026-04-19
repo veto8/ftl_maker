@@ -503,14 +503,9 @@ int main(int argc, char *argv[]) {
 
   for (int x = 0; x < 104; x++) {
 
-    if (x > 3) {
-      // break;
-    }
-
-    if (strlen(ftl[x]) == 5) {
-
-      char *code = get_substring(ftl[x], 0, 2);
-      printf("size: %d code: %s folder: %s  \n", strlen(ftl[x]), code, ftl[x]);
+    char *code = get_substring(ftl[x], 0, 2);
+    printf("size: %d code: %s folder: %s  \n", strlen(ftl[x]), code, ftl[x]);
+    if (strlen(ftl[x]) == 5 && x < 5) {
 
       char file_path[] = "i18n/";
       int result = create_directory(file_path);
