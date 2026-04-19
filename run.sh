@@ -1,2 +1,2 @@
-./build/ftl_maker keys.txt th en 
+./build/ftl_maker -b en-US.ftl -f i18n
 

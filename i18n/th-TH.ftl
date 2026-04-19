@@ -10,4 +10,5 @@ enter_text = ป้อนข้อความ
 status = สถานะ 
 show_passwod = แสดงรหัสผ่าน 
 hide_password = ซ่อนรหัสผ่าน 
+! about = About 
 about_us = เกี่ยวกับเรา 

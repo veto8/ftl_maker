@@ -11,7 +11,7 @@ run_build_and_execute() {
   #gcc -o translate src/translate.c -lcurl -ljansson
   cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
   cmake --build build
- ./build/ftl_maker 
+ ./run.sh
 }
 
 # Check if inotifywait is installed

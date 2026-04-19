@@ -1,12 +1,24 @@
 #include <ctype.h>
 #include <curl/curl.h>
+#include <dirent.h>
+#include <errno.h>
 #include <jansson.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
+
+#ifdef _WIN32
+#include <direct.h>
+#define mkdir(path, mode) _mkdir(path)
+#else
+#include <unistd.h>
+#endif
+
 #define MAX_LINE_LENGTH 256
 #define MAX_MESSAGE_ID_LENGTH 64
 #define MAX_MESSAGE_VALUE_LENGTH 256
@@ -292,7 +304,6 @@ bool starts_with(const char *str, const char *prefix) {
     return false;
   }
   bool x = strncmp(str, prefix, strlen(prefix));
-  // printf("%s %c %b \n", prefix, str[0], x);
   if (x == 0) {
     return true;
   } else {
@@ -308,8 +319,7 @@ char *get_substring(const char *str, int start, int length) {
   size_t str_len = strlen(str);
 
   if (start < 0 || start >= str_len || length <= 0) {
-    return NULL; // Or handle invalid input differently (e.g., return an empty
-                 // string)
+    return NULL;
   }
 
   // Adjust length if it exceeds the remaining string length
@@ -319,7 +329,7 @@ char *get_substring(const char *str, int start, int length) {
 
   char *substring = (char *)malloc((length + 1) * sizeof(char));
   if (substring == NULL) {
-    return NULL; // Memory allocation failed
+    return NULL;
   }
 
   strncpy(substring, str + start, length);
@@ -345,22 +355,109 @@ void log_message(const char *filename, const char *format, ...) {
   fclose(fp);
 }
 
+// Function to find the first file ending with a specified extension in a
+// directory
+char *find_first_file_with_extension(const char *directory,
+                                     const char *extension) {
+  DIR *dir;
+  struct dirent *ent;
+  struct stat file_stat;
+  char filepath[256]; // Buffer for the full file path (adjust as needed)
+  char *found_file = NULL;
+  size_t ext_len;
+
+  // Check for NULL inputs
+  if (directory == NULL || extension == NULL) {
+    fprintf(stderr, "Error: NULL directory or extension provided.\n");
+    return NULL;
+  }
+
+  // Calculate the length of the extension
+  ext_len = strlen(extension);
+
+  // Open the directory
+  dir = opendir(directory);
+
+  if (dir == NULL) {
+    perror("Error opening directory");
+    return NULL;
+  }
+
+  // Read directory entries
+  while ((ent = readdir(dir)) != NULL) {
+    // Ignore "." and ".." entries
+    if (strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0) {
+      continue;
+    }
+
+    // Construct the full file path
+    snprintf(filepath, sizeof(filepath), "%s/%s", directory, ent->d_name);
+
+    // Get file information
+    if (stat(filepath, &file_stat) == 0) {
+      // Check if it's a regular file
+      if (S_ISREG(file_stat.st_mode)) {
+        // Check if the filename ends with the specified extension
+        size_t len = strlen(ent->d_name);
+        if (len > ext_len &&
+            strcmp(ent->d_name + len - ext_len, extension) == 0) {
+          // Found a file ending with the specified extension
+          found_file = strdup(ent->d_name);
+          if (found_file == NULL) {
+            perror("strdup failed");
+            closedir(dir);
+            return NULL;
+          }
+          closedir(dir);     // Close directory before returning
+          return found_file; // Return the filename
+        }
+      }
+    } else {
+      fprintf(stderr, "Error getting file information for: %s\n", filepath);
+    }
+  }
+
+  // Close the directory
+  closedir(dir);
+  return NULL; // No file found
+}
+
 int main(int argc, char *argv[]) {
-  // printf("Arguments: %d \n", argc);
+  // char *filename = NULL;
+  // filename = find_first_file_with_extension(".", ".ftl");
+  // printf("filename: %s \n", filename);
+  printf("Arguments: %d \n", argc);
+  // char *base = "-b";
+  for (int i = 0; i < argc; i++) {
+    if (strncmp(argv[i], "-b", 2) == 0) {
+      // printf("  %b\n", strncmp(argv[i], base, 2));
+      printf("  argv[%d] = %s\n", i, argv[i + 1]);
+    }
+  }
+
+  return 0;
+  const char *directory_name = "i18n";
+
+  if (mkdir(directory_name, 0777) == 0) {
+    printf("Directory created successfully: %s\n", directory_name);
+  } else {
+    if (errno == EEXIST) {
+      printf("Directory already exists: %s\n", directory_name);
+    } else {
+      perror("Error creating directory");
+      return 1;
+    }
+  }
+
+  // fill the ftl possible translations
   char ftl[104][6];
   fill_ftl(ftl);
 
-  // FILE *fp = fopen("i18n/test", "w");
-  // fprintf(fp, "%s\n", "hello");
-  // fclose(fp);
-
   for (int x = 0; x < 104; x++) {
-    // printf("%s\n", ftl[x]);
     if (x == 2) {
       break;
     }
-
-    char *code = get_substring(ftl[x], 0, 2); // First 2 characters
+    char *code = get_substring(ftl[x], 0, 2);
     bool same_code = strncmp(code, "en", 2);
 
     char fpath[11] = "i18n/";
@@ -371,25 +468,22 @@ int main(int argc, char *argv[]) {
     FTLMessage messages[104];
     int num_messages = 0;
 
-    if (parse_ftl_file("base.ftl", messages, &num_messages) == 0) {
-      // printf("Parsed %d messages:\n", num_messages);
+    if (parse_ftl_file("en-US.ftl", messages, &num_messages) == 0) {
       for (int i = 0; i < num_messages; i++) {
-
         char *translation = NULL;
-        if (!starts_with(messages[i].id, "!") && same_code == 1) {
-          printf("code: %s\n", code);
-          printf("ID: %s, Value: %s\n", messages[i].id, messages[i].value);
-
+        // if (same_code == 1) {
+        if (!starts_with(messages[i].id, "!")) {
+          printf("code: %s ID: %s, Value: %s\n", code, messages[i].id,
+                 messages[i].value);
           translation = translate("en", code, messages[i].value);
-          // printf("Translation: %s\n", translation); //
           fprintf(fp, "%s = %s \n", messages[i].id, translation);
+        } else {
+          fprintf(fp, "%s = %s \n", messages[i].id, messages[i].value);
         }
-
-        // translation = translate("en", "de", messages[i].value);
-
         if (translation != NULL) {
           free(translation);
         }
+        //}
       }
     }
     fclose(fp);
