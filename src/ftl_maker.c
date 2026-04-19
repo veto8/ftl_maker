@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
       // const char *folder = ftl[x];
       char *code = get_substring(ftl[x], 0, 2);
 
-      if (strlen(ftl[x]) == 5) {
+      if (strlen(ftl[x]) == 5 || strlen(ftl[x]) == 2) {
         printf("%d/%d ...make %s/%s  \n", x, TRANS, ftl[x], app);
         char *folder_path2 = concat_strings(folder_path, ftl[x]);
         int result2 = create_directory(folder_path2);
