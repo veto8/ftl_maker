@@ -29,6 +29,18 @@
 #define MAX_MESSAGE_ID_LENGTH 64
 #define MAX_MESSAGE_VALUE_LENGTH 256
 
+// Structure to represent a message
+typedef struct {
+  char id[MAX_MESSAGE_ID_LENGTH];
+  char value[MAX_MESSAGE_VALUE_LENGTH];
+} FTLMessage;
+
+// Structure to hold the response data
+struct MemoryStruct {
+  char *memory;
+  size_t size;
+};
+
 int add(int a, int b);
 // int parse_ftl_file(const char *filename, FTLMessage *messages,
 //
