@@ -29,7 +29,8 @@ jobs:
       - name: Dependencies
         run: |
           choco install pkgconfiglite tree -y
-          vcpkg install curl jansson  
+          vcpkg install curl 
+          vcpkg install jansson 
 
       - name: Check
         run: |
