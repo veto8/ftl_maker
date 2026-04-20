@@ -29,8 +29,9 @@ jobs:
         run: |
          echo "CURL_INCLUDE_DIR is: $env:CURL_INCLUDE_DIR"
          echo "CURL_LIBRARY is: $env:CURL_LIBRARY"
-         # $env:CURL_DIR
-         # tree C:\ProgramData\chocolatey\lib\curl
+       # $env:CURL_DIR
+       # tree C:\ProgramData\chocolatey\lib\curl
+         
           
       - name: Checkout
         uses: actions/checkout@v4
