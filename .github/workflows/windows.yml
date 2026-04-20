@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Dependencies
         run: |
-          choco install libcurl -y
+          choco install curl pkgconfiglite tree -y
       - name: Check
         run: |
          echo "CURL_INCLUDE_DIR is: $env:CURL_INCLUDE_DIR"
