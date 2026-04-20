@@ -14,7 +14,8 @@ permissions:
   packages: none
 
 env:
-  CURL_INCLUDE_DIR: C:\ProgramData\chocolatey\lib\curl\tools\curl-8.19.0_1-win64-mingw\include
+  CURL_INCLUDE_DIR: C:\ProgramData\chocolatey\lib\curl\tools\curl-8.19.0_1-win64-mingw\include\curl
+  CURL_LIBRARY: C:\ProgramData\chocolatey\lib\curl\tools\curl-8.19.0_1-win64-mingw\lib\libcurl.a
 
 jobs:
   Build:
