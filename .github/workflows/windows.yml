@@ -13,8 +13,6 @@ permissions:
   issues: read
   packages: none
 
-env:
-  CURL_INCLUDE_DIR: C:\ProgramData\chocolatey\lib\curl\tools\curl-8.19.0_1-win64-mingw\include
 
 jobs:
   Build:
